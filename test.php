@@ -35,16 +35,21 @@ print "Today is: $today.";
 
 
 
-    
+  
 
 
 <?php
-
+$account_name = "usbank";
+$company = NULL;
 
 ini_set('diplay_errors', 'on');
-
+/*$mysqli->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);*/
 
 error_reporting(e_all);
+
+
+/*source: http://php.net/manual/en/mysqli.quickstart.prepared-statements.php*/
+
 
 $mysqli = new mysqli("oniddb.cws.oregonstate.edu","dohertki-db","gvBKWgFuUOM2piV6","dohertki-db");
 if($mysqli->connect_errno){
@@ -52,36 +57,73 @@ if($mysqli->connect_errno){
 } else { echo "connection made";}        
 
 
+if (!($stmt = $mysqli->prepare("
+    SELECT  d.name_d FROM account a
+    INNER JOIN transactions t ON t.acct_id = a.id  
+    INNER JOIN debits d ON  d.id = t.exp_id;"))) {
+    echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+}else { echo"  Prepare ";}
 
 
-if (!$mysqli->query("DROP TABLE IF EXISTS test") ||
-    !$mysqli->query("CREATE TABLE test(id INT, balance INT)") ||
-    !$mysqli->query("INSERT INTO test(id, balance) VALUES (1, 100)")){
-    echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+
+
+if (!$stmt->execute()) {
+    echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 
 
+if (!$stmt->bind_result( $company)){
+    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;}
+
+
+
+/*
+if (!($stmt = $mysqli->prepare("
+    SELECT d.id, d.name_d, d.desc_d, d.date_d, d.amount FROM account a
+    INNER JOIN transactions t ON t.acct_id = a.id  
+    INNER JOIN debits d ON  d.id = t.exp_id;"))) {
+    echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+}else { echo"  Prepare ";}
+
+if (!$stmt->execute()) {
+    echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+
+if (!$stmt->bind_result($did, $company, $desc_d, $date_d, $amount_d),                     ){
+    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;}
+
+
+ */
+?>
 
 
 
 
 
+<html>
+  <head>
+  </head>
+  <body>
+    <h1> HODOR</h1>
+
+    <table>
+      <tbody>
+      <th>Date </th>
+      <th>Payer/Payee</th>
+      <th> Description</th>
+      <th> C/D</th>
+      <th> Amount</th>
+      <th> Balance</th>
 
 
+         <?php
+        //printf("\nid: 5s (%s)\n", $row['id']);
 
-
-
-
-echo $mysqli->host_info . "\n";
-        if(!($stmt = $mysqli->prepare( "SELECT first_name, last_name FROM actor"))){
-            echo "Prepare Failed";
+        while ($stmt->fetch()){
+            printf("%s<br> ", $company);
         }
 
-
-
-
-
-        $stmt->close();
+//printf("\nid: 5s (%s)\n", $row['balance']);
 
 ?>
 
@@ -91,7 +133,28 @@ echo $mysqli->host_info . "\n";
 
 
 
+      </tbody>
 
+    </table>
+
+
+
+
+
+
+  </body>
+
+
+
+
+</html>
+
+
+<?php
+
+        $stmt->close();
+
+?>
 
 
 
