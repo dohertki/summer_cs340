@@ -3,49 +3,38 @@
 
 
 
+
+
+
+
+
 <?php
+echo "hello world";
 
+$test_array = [ 
+    "foo" => "bar",
+    ];
 
-
-$today = date("Y-m-d");
-
-print "Today is: $today.";
-
-
-$bn = $_POST['bank_name'];
-$add = $_POST['bank_add'];
-$ph = $_POST['bank_phone'];
-
-
-
-$sql = "INSERT INTO banks(bank_name, address, phone) VALUES(?,?,?)";
-
-ini_set('diplay_errors', 'on');
-error_reporting(e_all);
-
-/*source: http://php.net/manual/en/mysqli.quickstart.prepared-statements.php*/
-
-
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu","dohertki-db","gvBKWgFuUOM2piV6","dohertki-db");
-if($mysqli->connect_errno){
-    echo "connection error". $mysqli->connect_errno . " " . $mysqli->connect_error;
-} else { echo "connection made";}        
-
-
-$stmt = $mysqli->prepare($sql);
-$stmt->bind_param("sss", $bn, $add, $ph);
-$stmt->execute();
-
-$stmt->close();
-$mysqli->close();
-
+print ($test_array["foo"]);
 
 
 ?>
 
 
+<?php
+echo "hello world";
 
+$test_array = [ 
+    "foo" => "bar",
+    ];
 
+print ($test_array["foo"]);
+
+$today = date("Y-m-d");
+
+print "Today is: $today.";
+
+?>
 
 
 
@@ -82,12 +71,11 @@ if (!($stmt = $mysqli->prepare("
 
 if (!$stmt->execute()) {
     echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
-}else{ echo "execute";}
-
-
-if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
-    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;
 }
+
+
+if (!$stmt->bind_result( $id, $bank, $bank_add, $bank_phone )){
+    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;}
 
 
 ?>
@@ -95,7 +83,7 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
 
 <html>
   <head>
-    <title> CS340 Project</title>
+    <title> Ledger</title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>  
   </head>
   <body>
@@ -104,32 +92,32 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
 <!-- Tab menu based on source: http://www.htmldog.com/techniques/tabs/ -->
 
     <div id="header">
-        <h1>bank added</h1>
+        <h1>Banks</h1>
         <ul>
             <li ><a href="home.php">Ledger</a></li>
-            <li id="selected"><a href="account.php">Accounts</a></li>
+            <li><a href="account.php">Accounts</a></li>
             <li><a href="expenses.php">Expenses</a></li>
             <li><a href="incomes.php">Incomes</a></li>
-            <li><a href="banks.php">Banks</a></li>
+            <li id ="selected"><a href="banks.php">Banks</a></li>
         </ul>
     </div>
 
 
-    
+   <br/> 
     <div>
     <table>
       <tbody>
       <th>  </th> 
       <th>Bank </th>
-      <th>Address</th>
-      <th> Phone</th>
+      <th>Adress</th>
+      <th>Phone </th>
 
 
          <?php
 
         while ($stmt->fetch()){
+            printf("<tr><td> %s </td><td> %s</td><td> %s </td><td> %s </td></tr> ", $id, $bank, $bank_add, $bank_phone );
         
-            printf("<tr><td> %s</td><td> %s </td><td> %s </td><td> %s </td></tr> ", $id_t, $bank_t, $address_t, $phone_t );
         
         }
 
@@ -147,9 +135,34 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
     </div>
 
 
+    <div>
+      <form method="post"  action="insert_bank.php">
+        <fieldset>
+          <legend> Add Bank</legend>
+
+            Bank Name:
+             <input type="text" name="bank_name" maxlength="30" required="required"/>
+           <br/> 
+
+            Bank Address:
+             <input type="text" name="bank_add" maxlength="30" required="required"/>
+           <br/>
+            
+
+            Bank Phone:
+             <input type="text" name="bank_phone" maxlength="30" required="required"/>
+           <br/>    
+        
 
 
-     <a id="return" href="banks.php"> Back</a>
+
+        </fieldset>
+        <input type="submit" name="Add" value="Add Bank" />
+      </form>    
+
+
+    </div>
+
 
 
   </body>

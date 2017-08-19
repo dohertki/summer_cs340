@@ -3,6 +3,7 @@
 
 
 
+
 <?php
 
 
@@ -17,8 +18,13 @@ $add = $_POST['bank_add'];
 $ph = $_POST['bank_phone'];
 
 
-
-$sql = "INSERT INTO banks(bank_name, address, phone) VALUES(?,?,?)";
+$bid = $_POST['banks'];
+$uid = 1;
+$an = $_POST['acct_name'];
+$at = $_POST['acct_type'];
+$bl = $_POST['acct_balance'];
+echo " bid". $bid. " uid" .$uid . " an" . $an . " at" . $at . " bl". $bl ;
+$sql = "INSERT INTO account(bank_id, user_id, acct_name, acct_type, acct_balance) VALUES(?,?,?,?,?)";
 
 ini_set('diplay_errors', 'on');
 error_reporting(e_all);
@@ -33,7 +39,7 @@ if($mysqli->connect_errno){
 
 
 $stmt = $mysqli->prepare($sql);
-$stmt->bind_param("sss", $bn, $add, $ph);
+$stmt->bind_param("iisii", $bid, $uid, $an, $at, $bl);
 $stmt->execute();
 
 $stmt->close();
@@ -46,20 +52,10 @@ $mysqli->close();
 
 
 
-
-
-
-
-
-
-  
-
-
 <?php
 
-ini_set('diplay_errors', 'on');
 
-error_reporting(e_all);
+  //  SELECT  a.id, a.bank_id, a.user_id, a.acct_name, a.acct_type, a.acct_balance FROM account a;
 
 
 /*source: http://php.net/manual/en/mysqli.quickstart.prepared-statements.php*/
@@ -72,7 +68,14 @@ if($mysqli->connect_errno){
 
 
 if (!($stmt = $mysqli->prepare("
-    SELECT  id, bank_name, address, phone FROM banks;
+
+
+    SELECT  a.id, b.bank_name, a.bank_id, a.user_id, a.acct_name, a.acct_type,a.acct_balance 
+    FROM account a
+    INNER JOIN banks b ON a.bank_id = b.id
+    ORDER by a.id
+    ;  
+
 
     "))) {
     echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
@@ -82,20 +85,24 @@ if (!($stmt = $mysqli->prepare("
 
 if (!$stmt->execute()) {
     echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
-}else{ echo "execute";}
-
-
-if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
-    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;
 }
 
 
+if (!$stmt->bind_result( $id, $bank, $bankid, $owner, $acct_name, $type, $balance )){
+    echo "Binding output parameters failed: (". $stmt->errno  . ") " . $stmt->error;}
+
+
+
+/*
+    SELECT d.id, d.name_d, d.desc_d, d.date_d, d.amount FROM account a
+
+ */
 ?>
 <!DOCTYPE html>
 
 <html>
   <head>
-    <title> CS340 Project</title>
+    <title>CS340 Project </title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>  
   </head>
   <body>
@@ -104,13 +111,13 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
 <!-- Tab menu based on source: http://www.htmldog.com/techniques/tabs/ -->
 
     <div id="header">
-        <h1>bank added</h1>
+        <h1>Account added</h1>
         <ul>
             <li ><a href="home.php">Ledger</a></li>
-            <li id="selected"><a href="account.php">Accounts</a></li>
+            <li ><a href="account.php">Accounts</a></li>
             <li><a href="expenses.php">Expenses</a></li>
             <li><a href="incomes.php">Incomes</a></li>
-            <li><a href="banks.php">Banks</a></li>
+            <li ><a href="banks.php">Banks</a></li>
         </ul>
     </div>
 
@@ -121,15 +128,17 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
       <tbody>
       <th>  </th> 
       <th>Bank </th>
-      <th>Address</th>
-      <th> Phone</th>
+      <th>Account Name</th>
+      <th> Account Type</th>
+      <th> Balance</th>
 
 
          <?php
+        //printf("\nid: 5s (%s)\n", $row['id']);
 
         while ($stmt->fetch()){
+            printf("<tr><td> %s </td><td> %s</td><td> %s </td><td> %s </td><td> %s </td></tr> ", $id, $bank, $acct_name, $type, $balance );
         
-            printf("<tr><td> %s</td><td> %s </td><td> %s </td><td> %s </td></tr> ", $id_t, $bank_t, $address_t, $phone_t );
         
         }
 
@@ -138,19 +147,13 @@ if (!$stmt->bind_result( $id_t, $bank_t, $address_t, $phone_t)){
 ?>
 
 
-
-
-
       </tbody>
 
     </table>
     </div>
 
 
-
-
-     <a id="return" href="banks.php"> Back</a>
-
+     <a id="return" href="account.php"> Back</a>
 
   </body>
 
