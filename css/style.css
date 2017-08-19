@@ -1,0 +1,176 @@
+
+
+
+/*---Tab Style---*/
+
+.tab{
+    color: blue;
+    display: none;
+    padding: 50px;
+    text-align: center;
+}
+
+.tabsbutton:hover{
+    background-color: #777;
+
+
+}
+
+
+
+
+
+.tablink {
+    background-color: #555;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 25%;
+}
+
+
+
+body {
+    background: #f80;
+    font: 0.8em arial, helvetica, sans-serif;
+    text-transform: lowercase;
+    margin: 0;
+    padding: 0;
+}
+
+        #header {
+            background-color: white;
+        }
+
+        #header ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: white;
+            float: left;
+            width: 100%;
+        }
+
+        #header li {
+            float: left;
+            margin: 0 1em 0 0;
+        }
+
+        #header a {
+            text-decoration: none;
+            display: block;
+            width: 6em;
+            padding: 0 0.5em;
+            font-weight: bold;
+            color: black;
+            border-bottom: 0.5em solid #fc6;
+            color: #fc6;
+        }
+
+        #header a:hover {
+            color: #fa3;
+            border-color: #fa3;
+        }
+
+        #header #selected a {
+            color: #f80;
+            border-color: #f80;
+        }
+
+        #content {
+            clear: both;
+            color: white;
+            padding: 1em;
+        }
+
+        #content p {
+            margin: 0 0 1em 0;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0.5em 0 1em 0.5em;
+            color: #f80;
+            font-size: 1.5em;
+            font-style: italic;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*---Table Style---*/
+table{
+    padding: 10px;
+    margin: 10px;
+    width: 65%;
+}
+        
+table, th, td {
+    width: 800px;
+    border: 2px solid black;
+    border-collapse: collapse; 
+   
+}
+
+td{
+    text-align: center;
+}
+  
+tbody > tr:nth-child(even) {background: white }
+tbody > tr:nth-child(odd) {background: #edf2eb }
+
+tbody th{
+    font-weight: normal;
+    font-style: italic;
+    width:20px;
+}
+
+/*---List Style---*/
+
+dt{
+    font-weight: bold;
+}
+
+
+.outer-content{
+  margin-top:20px;
+  padding: 1px; 
+  background: pink;
+  width: 75%;
+
+}
+
+.inner-content{
+    text-align: center;
+    margin: auto;
+    background:#21baff;
+    width: 75%;
+}
+
+
+
+form{
+    margin-top: 10px;
+    
+    width: 55%;
+    padding: 10px;
+}
+form p{
+    border: solid 2px;
+    padding: inherit;
+}
+
