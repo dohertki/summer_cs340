@@ -96,6 +96,7 @@ VALUES('2017-06-06', 'Safeway','Groceries','66.33'),
 
 INSERT INTO credits( date_c, name_c, desc_c, amount) 
 VALUES('2017-06-01','GOOG' ,'stock divedend, symbol= GOOG','163.33'), 
-      ('2017-06-01','F' ,'stock divedend, symbol='F' ','1122.00'),
-      ('2017-06-10','US Dept. of Agriculture ,'salary' ','1722.00'),
-      ('2017-06-25','US Dept. of Agriculture ,'salary' ','1722.00');
+      ('2017-06-01','F' ,'stock divedend, symbol=F ','1122.00'),
+      ('2017-06-10','US Dept of Agriculture' ,'salary' ,'1722.00'),
+
+      ('2017-06-25','US Dept of Agriculture' ,'salary' ,'1722.00');
